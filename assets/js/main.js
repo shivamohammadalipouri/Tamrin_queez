@@ -28,61 +28,89 @@ async function setqueez(){
             console.log(arr);
             queez.innerText = arr[i].question;
 
+
+            // random number for options
+            let arr_rand_num = [];
+            while(arr_rand_num.length != arr[i].incorrect_answers.length+1){
+
+                let rand_num = Math.floor(Math.random()*(arr[i].incorrect_answers.length+1));
+
+                let n = arr_rand_num.filter(function search(num){
+
+                    return num==rand_num
+                });
+
+                if(n.length){
+
+                    continue
+                }
+                else{
+
+                    arr_rand_num.push(rand_num);
+                }
+            }
+
             // show options 
-            for(let j=0; j<arr[i].incorrect_answers.length+1; j++){
+            for(item of arr_rand_num){
 
                 let optionDiv = document.createElement("div");
                 optionDiv.className = "option";
 
-                if(j==arr[i].incorrect_answers.length){
+                if(item == arr[i].incorrect_answers.length){
 
                     optionDiv.innerText = arr[i].correct_answer;
                     answer.appendChild(optionDiv);
+
                 }
+
                 else{
 
-                    optionDiv.innerText = arr[i].incorrect_answers[j];
+                    optionDiv.innerText = arr[i].incorrect_answers[item];
                     answer.appendChild(optionDiv);
                 }
-
 
                 // change the colrs of the circles and change the question 
                 optionDiv.addEventListener("click", (event) => {
 
                     let correct_answer = arr[i].correct_answer;
                     let user_answer    = event.target.innerText;
-
+                
                     if ( correct_answer == user_answer){
-
+                
                         let number_circle = i+1;
                         let circle_name = "circle_"+number_circle;
                         const circle = document.getElementById(circle_name);
                         circle.style.backgroundColor = 'green';
-
+                
                         nextLevel();
                     }
                     else{
-
+                
                         let number_circle = i+1;
                         let circle_name = "circle_"+number_circle;
                         const circle = document.getElementById(circle_name);
                         circle.style.backgroundColor = 'red';
-
+                
                         nextLevel();
                     }
-    
+                    
                 });
-
+                
             }
         }
         start();
 
+
         // update to replace the question 
         function nextLevel(){
 
-            if (i==arr.length-1){
+            const btn = document.getElementById("btn");
+            btn.addEventListener("click", () =>{
 
-                i=0;
+                setTimeout(() => {
+                    window.location.reload(true);
+                },2);
+
 
                 // clear the colors of the circles
                 for(let y=1; y<=4; y++){
@@ -92,11 +120,10 @@ async function setqueez(){
                     circle.style.backgroundColor = 'white';
                 }
 
-            }
-            else{
-                i=i+1;
-            }
-            
+            });
+
+
+            i=i+1;
             start();
 
         }
